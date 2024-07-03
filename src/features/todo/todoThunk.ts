@@ -1,6 +1,6 @@
 import { db } from "../../app/db"
 import type { Todo } from "./todo.type"
-import type { TodoThunk } from "./todoSlice"
+import type { TodoAction, TodoThunk } from "./todoSlice"
 import { addTodo, removeTodo, reorderTodo, updateTodo } from "./todoSlice"
 
 const addTodoThunk =
@@ -82,9 +82,22 @@ const reorderTodoThunk =
     })
   }
 
+const fetchTodoThunk = (): TodoThunk<Promise<void>> => dispatch =>
+  db.todos
+    .orderBy("order")
+    .toArray()
+    .then(todos => {
+      const fetchTodoAction: TodoAction = {
+        type: "todo/fetchTodo",
+        payload: { todos },
+      }
+      dispatch(fetchTodoAction)
+    })
+
 export {
   addTodoThunk,
   removeTodoThunk,
   updateTodoThunk,
   reorderTodoThunk,
+  fetchTodoThunk,
 }

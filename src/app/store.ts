@@ -2,6 +2,7 @@ import type { Action, ThunkAction } from "@reduxjs/toolkit"
 import { combineSlices, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { todoSlice } from "../features/todo/todoSlice"
+import { fetchTodoThunk } from "../features/todo/todoThunk"
 
 const rootReducer = combineSlices(todoSlice)
 
@@ -18,6 +19,8 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
 }
 
 export const store = makeStore()
+
+store.dispatch(fetchTodoThunk())
 
 // Infer the type of `store`
 export type AppStore = typeof store

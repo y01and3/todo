@@ -1,7 +1,7 @@
-import type { PayloadAction, ThunkAction } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
-import type { Todo } from "./todo.type";
-import { RootState } from "../../app/store";
+import type { PayloadAction, ThunkAction } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit"
+import type { Todo } from "./todo.type"
+import { RootState } from "../../app/store"
 
 export const todoSlice = createSlice({
   name: "todo",
@@ -34,6 +34,8 @@ export const todoSlice = createSlice({
       state.splice(action.payload.afterIndex, 0, movedTodo);
       return state;
     },
+    fetchTodo: (state, action: PayloadAction<{ todos: Todo[] }>) =>
+      action.payload.todos,
   },
 });
 
@@ -41,7 +43,7 @@ export const { addTodo, removeTodo, updateTodo, reorderTodo } =
   todoSlice.actions;
 export type TodoAction = ReturnType<
   (typeof todoSlice.actions)[keyof typeof todoSlice.actions]
->;
+>
 export type TodoThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
