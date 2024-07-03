@@ -1,4 +1,4 @@
-import type { EntityTable } from "dexie";
+import type { EntityTable } from "dexie"
 import Dexie from "dexie"
 import type { Todo } from "../features/todo/todo.type"
 
