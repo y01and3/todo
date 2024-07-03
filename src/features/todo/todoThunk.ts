@@ -1,4 +1,3 @@
-import type { TodoItem } from "../../app/db";
 import { db } from "../../app/db"
 import type { Todo } from "./todo.type"
 import type { TodoThunk } from "./todoSlice"
@@ -50,18 +49,24 @@ const reorderTodoThunk =
   async (dispatch, getState) => {
     if (beforeIndex === afterIndex) return
     const todoId = id ?? getState().todo[beforeIndex].id
+    const prevId =
+      getState().todo[beforeIndex > afterIndex ? afterIndex - 1 : afterIndex]?.id
+    const nextId =
+      getState().todo[beforeIndex > afterIndex ? afterIndex : afterIndex + 1]?.id
     if (todoId === undefined) return
 
     dispatch(reorderTodo({ beforeIndex, afterIndex }))
-    try {
-      const todoDb: TodoItem[] = await db.todos.toArray()
 
-      const [movedTodo] = todoDb.splice(beforeIndex, 1)
-      todoDb.splice(afterIndex, 0, movedTodo)
-      await db.transaction("rw", db.todos, async () =>
-        todoDb.map((todo, index) => db.todos.update(todo.id, { order: index })),
-      )
-    } catch (error) {
+    const prevOrderPromise = db.todos.get(prevId).then(todo => todo?.order || 0)
+    const nextOrderPromise = db.todos
+      .get(nextId)
+      .then(todo => todo?.order || Date.now())
+    const [prevOrder, nextOrder] = await Promise.all([
+      prevOrderPromise,
+      nextOrderPromise,
+    ])
+    const order = (prevOrder + nextOrder) / 2
+    db.todos.update(todoId, { order }).catch((error: any) => {
       console.error("Failed to reorder todos:", error)
       const curIndex = getState().todo.findIndex(todo => todo.id === todoId)
       if (curIndex !== -1)
@@ -74,7 +79,7 @@ const reorderTodoThunk =
                 : getState().todo.length - 1,
           }),
         )
-    }
+    })
   }
 
 export {
