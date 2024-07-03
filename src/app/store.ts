@@ -11,6 +11,7 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
   const store = configureStore({
     reducer: rootReducer,
     preloadedState,
+    middleware: getDefaultMiddleware => getDefaultMiddleware(),
   })
   setupListeners(store.dispatch)
   return store

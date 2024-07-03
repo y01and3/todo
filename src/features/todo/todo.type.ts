@@ -1,5 +1,6 @@
 type TodoPriority = "low" | "medium" | "high"
 interface Todo {
+  id: number
   tittle: string
   discription?: string
   priority: TodoPriority
@@ -12,9 +13,4 @@ interface Todo {
   // subTodos?: Todo[]
 }
 
-interface TodoItem extends Todo {
-  id: number
-}
-
-
-export type { TodoPriority, Todo, TodoItem }
+export type { TodoPriority, Todo }

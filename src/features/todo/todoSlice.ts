@@ -1,36 +1,50 @@
-import type { PayloadAction } from "@reduxjs/toolkit"
-import { createSlice } from "@reduxjs/toolkit"
-import type { Todo, TodoItem } from "./todo.type"
+import type { PayloadAction, ThunkAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import type { Todo } from "./todo.type";
+import { RootState } from "../../app/store";
 
 export const todoSlice = createSlice({
-  name: "todoList",
-  initialState: [] as TodoItem[],
+  name: "todo",
+  initialState: [] as Todo[],
   reducers: {
     addTodo: (state, action: PayloadAction<{ added: Todo }>) => {
-      state.push({ ...action.payload.added, id: state.length })
-      return state
+      state.push({ ...action.payload.added });
+      return state;
     },
     removeTodo: (state, action: PayloadAction<{ id: number }>) =>
-      state.filter(todo => todo.id !== action.payload.id),
+      state.filter((todo) => todo.id !== action.payload.id),
     updateTodo: (
       state,
-      action: PayloadAction<{ id: number; updated: Partial<Todo> }>,
+      action: PayloadAction<{ id: number; updated: Partial<Todo> }>
     ) =>
-      state.map(todo =>
+      state.map((todo) =>
         todo.id === action.payload.id
           ? { ...todo, ...action.payload.updated }
-          : todo,
+          : todo
       ),
     reorderTodo: (
       state,
-      action: PayloadAction<{ id: number; afterIndex: number }>,
+      action: PayloadAction<{
+        beforeIndex: number;
+        afterIndex: number;
+      }>
     ) => {
-      const movedTodo = state.find(todo => todo.id === action.payload.id)
-      state.splice(state.indexOf(movedTodo as TodoItem), 1)
-      state.splice(action.payload.afterIndex, 0, movedTodo as TodoItem)
-      return state
+      const movedTodo = state[action.payload.beforeIndex];
+      state.splice(action.payload.beforeIndex, 1);
+      state.splice(action.payload.afterIndex, 0, movedTodo);
+      return state;
     },
   },
-})
+});
 
-export const { addTodo, removeTodo, updateTodo, reorderTodo } = todoSlice.actions
+export const { addTodo, removeTodo, updateTodo, reorderTodo } =
+  todoSlice.actions;
+export type TodoAction = ReturnType<
+  (typeof todoSlice.actions)[keyof typeof todoSlice.actions]
+>;
+export type TodoThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  TodoAction
+>;

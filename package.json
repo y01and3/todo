@@ -40,6 +40,8 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
     "antd": "^5.20.3",
+    "dexie": "^4.0.8",
+    "dexie-react-hooks": "^1.1.7",
     "iconoir-react": "^7.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
