@@ -6,10 +6,11 @@ import { addTodo, removeTodo, reorderTodo, updateTodo } from "./todoSlice"
 const addTodoThunk =
   (added: Todo): TodoThunk =>
   async dispatch => {
+    const createdAt = Date.now()
     await db.todos
-      .add({ ...added, order: Date.now() })
+      .add({ ...added, createdAt, order: createdAt })
       .then((id: number) => {
-        dispatch(addTodo({ added: { ...added, id } }))
+        dispatch(addTodo({ added: { ...added, id, createdAt } }))
       })
       .catch((error: any) => {
         console.error("Failed to add todo:", error)
@@ -35,10 +36,11 @@ const updateTodoThunk =
   async (dispatch, getState) => {
     const todo = getState().todo.find(todo => todo.id === id)
     if (!todo) return
+    const changedAt = Date.now()
 
-    dispatch(updateTodo({ id, updated }))
+    dispatch(updateTodo({ id, updated: { ...updated, changedAt } }))
 
-    db.todos.update(id, updated).catch((error: any) => {
+    db.todos.update(id, { ...updated, changedAt }).catch((error: any) => {
       console.error("Failed to update todo:", error)
       dispatch(updateTodo({ id, updated: todo }))
     })
@@ -50,9 +52,11 @@ const reorderTodoThunk =
     if (beforeIndex === afterIndex) return
     const todoId = id ?? getState().todo[beforeIndex].id
     const prevId =
-      getState().todo[beforeIndex > afterIndex ? afterIndex - 1 : afterIndex]?.id
+      getState().todo[beforeIndex > afterIndex ? afterIndex - 1 : afterIndex]
+        ?.id
     const nextId =
-      getState().todo[beforeIndex > afterIndex ? afterIndex : afterIndex + 1]?.id
+      getState().todo[beforeIndex > afterIndex ? afterIndex : afterIndex + 1]
+        ?.id
     if (todoId === undefined) return
 
     dispatch(reorderTodo({ beforeIndex, afterIndex }))
