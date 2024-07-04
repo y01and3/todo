@@ -1,7 +1,7 @@
 type TodoPriority = "low" | "medium" | "high"
 interface Todo {
   id: number
-  tittle: string
+  title: string
   discription?: string
   priority: TodoPriority
   isComplete: boolean
