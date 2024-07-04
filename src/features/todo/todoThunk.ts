@@ -31,7 +31,7 @@ const removeTodoThunk =
   }
 
 const updateTodoThunk =
-  (id: number, updated: Partial<Todo>): TodoThunk =>
+  (id: number, updated: Partial<Omit<Todo, "id">>): TodoThunk =>
   async (dispatch, getState) => {
     const todo = getState().todo.find(todo => todo.id === id)
     if (!todo) return
