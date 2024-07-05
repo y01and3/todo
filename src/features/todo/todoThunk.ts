@@ -4,11 +4,11 @@ import type { TodoAction, TodoThunk } from "./todoSlice"
 import { addTodo, removeTodo, reorderTodo, updateTodo } from "./todoSlice"
 
 const addTodoThunk =
-  (added: Todo): TodoThunk =>
+  (added: Todo): TodoThunk<Promise<void>> =>
   async dispatch => {
     const createdAt = Date.now()
-    await db.todos
-      .add({ ...added, createdAt, order: createdAt })
+    return db.todos
+      .add({ ...added, createdAt, order: createdAt, id: undefined })
       .then((id: number) => {
         dispatch(addTodo({ added: { ...added, id, createdAt } }))
       })
@@ -32,7 +32,7 @@ const removeTodoThunk =
   }
 
 const updateTodoThunk =
-  (id: number, updated: Partial<Omit<Todo, "id">>): TodoThunk =>
+  (id: number, updated: Partial<Omit<Todo, "id" | "createdAt">>): TodoThunk =>
   async (dispatch, getState) => {
     const todo = getState().todo.find(todo => todo.id === id)
     if (!todo) return
@@ -42,7 +42,7 @@ const updateTodoThunk =
 
     db.todos.update(id, { ...updated, changedAt }).catch((error: any) => {
       console.error("Failed to update todo:", error)
-      dispatch(updateTodo({ id, updated: todo }))
+      dispatch(updateTodo({ id, updated: { ...todo, changedAt: undefined } }))
     })
   }
 
