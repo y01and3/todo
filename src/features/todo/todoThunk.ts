@@ -18,38 +18,58 @@ const addTodoThunk =
   }
 
 const removeTodoThunk =
-  (id: number): TodoThunk =>
+  (id: number, errorHanding?: () => void): TodoThunk =>
   async (dispatch, getState) => {
     const todo = getState().todo.find(todo => todo.id === id)
-    if (!todo) return
+    if (!todo) {
+      errorHanding?.()
+      return
+    }
 
     dispatch(removeTodo({ id }))
 
     db.todos.delete(id).catch((error: any) => {
       console.error("Failed to remove todo:", error)
       dispatch(addTodo({ added: todo }))
+      errorHanding?.()
     })
   }
 
 const updateTodoThunk =
-  (id: number, updated: Partial<Omit<Todo, "id" | "createdAt">>): TodoThunk =>
+  (
+    id: number,
+    updated: Partial<Omit<Todo, "id" | "createdAt">>,
+    errorHanding?: () => void,
+  ): TodoThunk =>
   async (dispatch, getState) => {
     const todo = getState().todo.find(todo => todo.id === id)
-    if (!todo) return
+    if (!todo) {
+      errorHanding?.()
+      return
+    }
     const changedAt = Date.now()
 
     dispatch(updateTodo({ id, updated: { ...updated, changedAt } }))
 
     db.todos.update(id, { ...updated, changedAt }).catch((error: any) => {
       console.error("Failed to update todo:", error)
-      dispatch(updateTodo({ id, updated: { ...todo, changedAt: undefined } }))
+      dispatch(updateTodo({ id, updated: { changedAt: undefined, ...todo } }))
+      errorHanding?.()
     })
   }
 
 const reorderTodoThunk =
-  (beforeIndex: number, afterIndex: number, id?: number): TodoThunk =>
+  (
+    beforeIndex: number,
+    afterIndex: number,
+    id?: number,
+    errorHanding?: () => void,
+  ): TodoThunk =>
   async (dispatch, getState) => {
-    if (beforeIndex === afterIndex) return
+    if (beforeIndex === afterIndex) {
+      errorHanding?.()
+      return
+    }
     const todoId = id ?? getState().todo[beforeIndex].id
     const prevId =
       getState().todo[beforeIndex > afterIndex ? afterIndex - 1 : afterIndex]
@@ -57,7 +77,10 @@ const reorderTodoThunk =
     const nextId =
       getState().todo[beforeIndex > afterIndex ? afterIndex : afterIndex + 1]
         ?.id
-    if (todoId === undefined) return
+    if (todoId === undefined) {
+      errorHanding?.()
+      return
+    }
 
     dispatch(reorderTodo({ beforeIndex, afterIndex }))
 
@@ -83,6 +106,7 @@ const reorderTodoThunk =
                 : getState().todo.length - 1,
           }),
         )
+      errorHanding?.()
     })
   }
 
