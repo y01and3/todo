@@ -7,10 +7,10 @@ interface TodoDb extends Todo {
 }
 
 type RemoveUndefinedProperties<T> = {
-  [K in keyof T]: T[K] extends undefined ? undefined : T[K];
-};
+  [K in keyof T]: T[K] extends undefined ? undefined : T[K]
+}
 
-type TodoDbItem = RemoveUndefinedProperties<TodoDb>;
+type TodoDbItem = RemoveUndefinedProperties<TodoDb>
 
 export const db = new Dexie("TodosDatabase") as Dexie & {
   todos: EntityTable<TodoDbItem, "id">
