@@ -1,4 +1,4 @@
-type TodoPriority = "low" | "medium" | "high"
+type TodoPriority = "none" | "low" | "medium" | "high"
 interface Todo {
   id: number
   title: string
