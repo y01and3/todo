@@ -4,7 +4,7 @@ import type { TodoAction, TodoThunk } from "./todoSlice"
 import { addTodo, removeTodo, reorderTodo, updateTodo } from "./todoSlice"
 
 const addTodoThunk =
-  (added: Todo): TodoThunk<Promise<void>> =>
+  (added: Omit<Todo, "id" | "createdAt">): TodoThunk<Promise<void>> =>
   async dispatch => {
     const createdAt = Date.now()
     return db.todos
