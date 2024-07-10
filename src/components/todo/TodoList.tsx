@@ -150,6 +150,7 @@ const columns: TableColumnsType<TodoListItem> = [
     dataIndex: "createdAt",
     width: 200,
     responsive: ["md"],
+    render: createdAt => new Date(createdAt).toLocaleString(),
   },
   {
     key: "edit",
