@@ -13,18 +13,16 @@ import { CSS } from "@dnd-kit/utilities"
 import { Button, Table } from "antd"
 import type { TableColumnsType } from "antd"
 import type { Todo, TodoPriority } from "../../features/todo/todo.type"
-import { CheckSquare, Edit, PageRight, XmarkSquare } from "iconoir-react"
+import { Edit, PageRight } from "iconoir-react"
 import { useAppDispatch } from "../../app/hooks"
 import {
   removeTodoThunk,
   reorderTodoThunk,
-  updateTodoThunk,
 } from "../../features/todo/todoThunk"
 import { Trash } from "iconoir-react/solid"
+import CheckTodoButton from "./CheckTodoButton"
 
-interface TodoListItem extends Omit<Todo, "discription" | "createdAt"> {
-  createdAt: string
-}
+interface TodoListItem extends Omit<Todo, "discription"> {}
 
 interface RowContextProps {
   setActivatorNodeRef?: (element: HTMLElement | null) => void
@@ -54,32 +52,6 @@ interface TitleProps {
 const Title = ({ children, priority }: TitleProps) => {
   const color = { none: undefined, low: "green", medium: "orange", high: "red" }
   return <p style={{ margin: 0, color: color[priority] }}>{children}</p>
-}
-
-interface CompleteHandleProps {
-  id: number
-  isComplete: boolean
-}
-const CompleteHandle = ({ id, isComplete }: CompleteHandleProps) => {
-  const [complete, setComplete] = React.useState(isComplete)
-  const dispatch = useAppDispatch()
-  const handleClick = () => {
-    const newComplete = !complete
-    setComplete(newComplete)
-    dispatch(
-      updateTodoThunk(id, { isComplete: newComplete }, () =>
-        setComplete(!newComplete),
-      ),
-    )
-  }
-  return (
-    <Button
-      type="text"
-      size="small"
-      icon={complete ? <CheckSquare /> : <XmarkSquare />}
-      onClick={handleClick}
-    />
-  )
 }
 
 const EditHandle = ({ id }: { id: number }) => {
@@ -127,7 +99,7 @@ const columns: TableColumnsType<TodoListItem> = [
     align: "center",
     width: 35,
     render: (_, record) => (
-      <CompleteHandle id={record.id} isComplete={record.isComplete} />
+      <CheckTodoButton id={record.id} isComplete={record.isComplete} />
     ),
   },
   {
