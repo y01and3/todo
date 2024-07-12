@@ -42,6 +42,7 @@
     "@dnd-kit/modifiers": "^7.0.0",
     "@dnd-kit/sortable": "^8.0.0",
     "@reduxjs/toolkit": "^2.0.1",
+    "@types/react-helmet": "^6.1.11",
     "antd": "^5.20.3",
     "dayjs": "^1.11.13",
     "dexie": "^4.0.8",
@@ -49,6 +50,7 @@
     "iconoir-react": "^7.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.26.1"
   },
