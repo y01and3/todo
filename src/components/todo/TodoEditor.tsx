@@ -1,4 +1,4 @@
-import { Todo } from "../../features/todo/todo.type"
+import type { Todo } from "../../features/todo/todo.type"
 import {
   Button,
   Checkbox,
@@ -14,6 +14,7 @@ import {
 import dayjs from "dayjs"
 import { useAppDispatch } from "../../app/hooks"
 import { addTodoThunk, updateTodoThunk } from "../../features/todo/todoThunk"
+import { useNavigate } from "react-router-dom"
 
 type Omitted = "id" | "createdAt" | "updatedAt"
 type FieldType = Omit<Todo, Omitted>
@@ -23,6 +24,7 @@ interface TodoEditorProps {
 }
 const TodoEditor = ({ todo }: TodoEditorProps) => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const [form] = Form.useForm<FieldType>()
   if (todo) form.setFieldsValue(todo)
 
@@ -37,6 +39,7 @@ const TodoEditor = ({ todo }: TodoEditorProps) => {
           })
         }),
       )
+      navigate(`/todo/${todo.id}`)
     } else {
       dispatch(addTodoThunk(values))
         .then(() => form.resetFields())
@@ -112,7 +115,7 @@ const TodoEditor = ({ todo }: TodoEditorProps) => {
         label="Deadline"
         name="deadline"
         getValueProps={value => ({ value: value && dayjs(Number(value)) })}
-        normalize={value => value && `${dayjs(value).valueOf()}`}
+        normalize={value => value && dayjs(value).valueOf()}
       >
         <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
       </Form.Item>
