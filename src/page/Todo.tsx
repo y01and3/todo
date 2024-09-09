@@ -13,7 +13,7 @@ const Todo = ({ setTitle }: PageProps) => {
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const filter = queryParams.get("filter")
-  setTitle((filter === "not-done" ? "Not Done" : filter) + " Todo List")
+  setTitle("Todo List")
   const selection = (state: RootState) =>
     filter === "not-done"
       ? selectTodoByIsComplete(state, false)
