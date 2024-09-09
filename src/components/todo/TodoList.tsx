@@ -21,6 +21,7 @@ import {
 } from "../../features/todo/todoThunk"
 import { Trash } from "iconoir-react/solid"
 import CheckTodoButton from "./CheckTodoButton"
+import { useNavigate } from "react-router-dom"
 
 interface TodoListItem extends Omit<Todo, "discription"> {}
 
@@ -55,13 +56,12 @@ const Title = ({ children, priority }: TitleProps) => {
 }
 
 const EditHandle = ({ id }: { id: number }) => {
+  const navigate = useNavigate()
+  const handleClick = () => {
+    navigate(`/todo/${id}/edit`)
+  }
   return (
-    <Button
-      type="text"
-      size="small"
-      icon={<Edit />}
-      href={`/todo/${id}/edit`}
-    />
+    <Button type="text" size="small" icon={<Edit />} onClick={handleClick} />
   )
 }
 
@@ -82,12 +82,16 @@ const DeleteHandle = ({ id }: { id: number }) => {
 }
 
 const DetailHandle = ({ id }: { id: number }) => {
+  const navigate = useNavigate()
+  const handleClick = () => {
+    navigate(`/todo/${id}`)
+  }
   return (
     <Button
       type="text"
       size="small"
       icon={<PageRight />}
-      href={`/todo/${id}`}
+      onClick={handleClick}
     />
   )
 }

@@ -23,6 +23,9 @@ const DetailedTodo = ({ todo }: DetailedTodoProps) => {
     )
     navigate("/todo")
   }
+  const handelEdit = () => {
+    navigate(`/todo/${todo.id}/edit`)
+  }
   const badgeColor = {
     none: undefined,
     low: "green",
@@ -78,7 +81,7 @@ const DetailedTodo = ({ todo }: DetailedTodoProps) => {
       }
       extra={
         <>
-          <Button type="primary" href={`/todo/${todo.id}/edit`}>
+          <Button type="primary" onClick={handelEdit}>
             Edit
           </Button>{" "}
           <Button type="primary" danger onClick={handelDelete}>
