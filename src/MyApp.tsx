@@ -1,15 +1,16 @@
 import React from "react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import AddTodo from "./page/AddTodo"
-import EditTodo from "./page/EditTodo"
-import TodoDetail from "./page/TodoDetail"
-import Home from "./page/Home"
-import Todo from "./page/Todo"
-import TodoMenu from "./components/todo/TodoMenu"
-import { Layout, theme, Typography } from "antd"
+import { Layout, Spin, theme, Typography } from "antd"
 import { Header, Content, Footer } from "antd/es/layout/layout"
 import Sider from "antd/es/layout/Sider"
 import AddTodoButton from "./components/todo/AddTodoButton"
+
+const AddTodo = React.lazy(() => import("./page/AddTodo"))
+const EditTodo = React.lazy(() => import("./page/EditTodo"))
+const TodoDetail = React.lazy(() => import("./page/TodoDetail"))
+const Home = React.lazy(() => import("./page/Home"))
+const Todo = React.lazy(() => import("./page/Todo"))
+const TodoMenu = React.lazy(() => import("./components/todo/TodoMenu"))
 
 const MyApp = () => {
   const {
@@ -48,19 +49,56 @@ const MyApp = () => {
           </Sider>
           <Content style={{ margin: "24px 16px 0", minHeight: "80vh" }}>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/todo" element={<Todo setTitle={setTitle} />} />
+              <Route
+                path="/"
+                element={
+                  <React.Suspense
+                    fallback={<Spin spinning percent="auto" fullscreen />}
+                  >
+                    <Home />
+                  </React.Suspense>
+                }
+              />
+              <Route
+                path="/todo"
+                element={
+                  <React.Suspense
+                    fallback={<Spin spinning percent="auto" fullscreen />}
+                  >
+                    {" "}
+                    <Todo setTitle={setTitle} />
+                  </React.Suspense>
+                }
+              />
               <Route
                 path="/todo/add"
-                element={<AddTodo setTitle={setTitle} />}
+                element={
+                  <React.Suspense
+                    fallback={<Spin spinning percent="auto" fullscreen />}
+                  >
+                    <AddTodo setTitle={setTitle} />
+                  </React.Suspense>
+                }
               />
               <Route
                 path="/todo/:id/edit"
-                element={<EditTodo setTitle={setTitle} />}
+                element={
+                  <React.Suspense
+                    fallback={<Spin spinning percent="auto" fullscreen />}
+                  >
+                    <EditTodo setTitle={setTitle} />
+                  </React.Suspense>
+                }
               />
               <Route
                 path="/todo/:id"
-                element={<TodoDetail setTitle={setTitle} />}
+                element={
+                  <React.Suspense
+                    fallback={<Spin spinning percent="auto" fullscreen />}
+                  >
+                    <TodoDetail setTitle={setTitle} />
+                  </React.Suspense>
+                }
               />
             </Routes>
             <AddTodoButton />
