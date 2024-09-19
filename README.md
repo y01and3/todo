@@ -1,27 +1,19 @@
-# vite-template-redux
+# Todo List Application
 
-Uses [Vite](https://vitejs.dev/), [Vitest](https://vitest.dev/), and [React Testing Library](https://github.com/testing-library/react-testing-library) to create a modern [React](https://react.dev/) app compatible with [Create React App](https://create-react-app.dev/)
+This is a Todo List application built with React, React Router, and Ant Design. The application allows users to add, edit, and view todo items.
 
-```sh
-npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
-```
+## Table of Contents
 
-## Goals
+- [Usage](#usage)
+- [Features](#features)
 
-- Easy migration from Create React App or Vite
-- As beginner friendly as Create React App
-- Optimized performance compared to Create React App
-- Customizable without ejecting
+## Usage
 
-## Scripts
+Once the development server is running, you can access the application in your web browser at `http://localhost:5173`.
 
-- `dev`/`start` - start dev server and open browser
-- `build` - build for production
-- `preview` - locally preview production build
-- `test` - launch test runner
+## Features
 
-## Inspiration
-
-- [Create React App](https://github.com/facebook/create-react-app/tree/main/packages/cra-template)
-- [Vite](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react)
-- [Vitest](https://github.com/vitest-dev/vitest/tree/main/examples/react-testing-lib)
+- **Add Todo**: Add new todo items.
+- **Edit Todo**: Edit existing todo items.
+- **View Todo**: View details of todo items.
+- **Responsive Design**: The application is responsive and works on different screen sizes.
